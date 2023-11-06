@@ -11,6 +11,8 @@
 Make example for this keyboard (after setting up your build environment):
 
     make bair/5x3:default
+    or for vial: qmk compile -kb bair/5x3 -km vial
+
 
 Flashing example for this keyboard:
 
