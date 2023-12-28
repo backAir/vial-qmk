@@ -14,7 +14,7 @@
 
 
 //1 Encoder
-#define ENCODERS_PAD { encoderA, encoderB }
+// #define ENCODERS_PAD { encoderA, encoderB }
 
 //2 or more encoders
 // #define ENCODERS_PAD_A { encoder1a, encoder2a }

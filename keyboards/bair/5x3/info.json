@@ -15,12 +15,12 @@
         "encoder": true
     },
     "matrix_pins": {
-        "cols": ["B8","B9","B4","B0","B1"],
+        "cols": ["B8","B9","B4","B0","A1"],
         "rows": ["B5", "B6", "B7"]
     },
     "encoder": {
         "rotary": [
-          { "pin_a": "A7", "pin_b": "A6", "resolution": 1 }
+          { "pin_a": "A7", "pin_b": "A6", "resolution": 4 }
         ]
     },
     "url": "",

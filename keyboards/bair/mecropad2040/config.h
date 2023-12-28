@@ -1,4 +1,4 @@
-// Copyright 2023 Anthony (@backAir)
+// Copyright 2023 Anthony (@bair)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
@@ -7,18 +7,13 @@
  * Feature disable options
  *  These options are also useful to firmware size reduction.
  */
-#define VIAL_KEYBOARD_UID {0xE1, 0x6B, 0x7F, 0xD8, 0x1D, 0xA0, 0x3E, 0x6A}
+#define VIAL_KEYBOARD_UID {0xA6, 0x95, 0x29, 0x6D, 0x1B, 0x83, 0x97, 0x5B}
+
 #define VIAL_UNLOCK_COMBO_ROWS { 0, 1 }
 #define VIAL_UNLOCK_COMBO_COLS { 0, 2 }
 
-
-
-//1 Encoder
-#define ENCODERS_PAD { encoderA, encoderB }
-
-//2 or more encoders
-// #define ENCODERS_PAD_A { encoder1a, encoder2a }
-// #define ENCODERS_PAD_B { encoder1b, encoder2b }
+#define VIAL_UNLOCK_COMBO_ROWS { 0, 1 }
+#define VIAL_UNLOCK_COMBO_COLS { 0, 2 }
 
 
 /* disable debug print */
