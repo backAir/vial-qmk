@@ -19,10 +19,10 @@
     },
     "encoder": {
         "rotary": [
-          { "pin_a": "GP0", "pin_b": "GP1", "resolution": 4 },
-          { "pin_a": "GP26", "pin_b": "GP27", "resolution": 4 },
-          { "pin_a": "GP28", "pin_b": "GP29", "resolution": 4 },
-          { "pin_a": "GP3", "pin_b": "GP2", "resolution": 4 }
+            { "pin_a": "GP3", "pin_b": "GP2", "resolution": 2 },
+            { "pin_a": "GP0", "pin_b": "GP1", "resolution": 2 },
+            { "pin_a": "GP28", "pin_b": "GP29", "resolution": 2 },
+            { "pin_a": "GP26", "pin_b": "GP27", "resolution": 2 }
         ]
     },
     "processor": "RP2040",
