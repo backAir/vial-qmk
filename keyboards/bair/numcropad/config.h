@@ -14,7 +14,9 @@
 
 
 
-// #define LED_CAPS_LOCK_PIN GP0
+#define LED_CAPS_LOCK_PIN GP0
+
+
 /* disable debug print */
 //#define NO_DEBUG
 

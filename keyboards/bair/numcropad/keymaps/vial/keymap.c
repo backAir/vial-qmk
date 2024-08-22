@@ -3,9 +3,10 @@
 
 #include "keymap_definitions.h"
 #include QMK_KEYBOARD_H
-// #include "config.h"
-// #include "quantum.h"
+#include "quantum.h"
+// #include "gpio.h"
 
+// #include "config.h"
 
 enum custom_keycodes {
     KC_P00 = SAFE_RANGE
@@ -72,3 +73,25 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 };
 #endif
 
+
+
+void matrix_init_user(void) {
+    // Set the pin as an output
+    setPinOutput(GP13);
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record){
+    switch (keycode) {
+        case FR_A:
+            if (record->event.pressed) {
+                writePinHigh(GP13);
+                return false;
+            }else
+            {
+                writePinLow(GP13);
+                return false;
+            }
+            break;
+    }
+    return true;
+}
