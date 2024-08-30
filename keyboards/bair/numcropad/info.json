@@ -14,12 +14,12 @@
         "encoder": true
     },
     "matrix_pins": {
-        "cols": ["GP6","GP4","GP9","GP14","GP15"],
-        "rows": ["GP5","GP7", "GP8", "GP10"]
+        "cols": ["GP6","GP1","GP9","GP14","GP15"],
+        "rows": ["GP2","GP7", "GP8", "GP10"]
     },
     "encoder": {
         "rotary": [
-            { "pin_a": "GP3", "pin_b": "GP2", "resolution": 2 }
+            { "pin_a": "GP3", "pin_b": "GP11", "resolution": 2 }
         ]
     },
     "processor": "RP2040",

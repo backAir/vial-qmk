@@ -16,6 +16,11 @@
 
 #define LED_CAPS_LOCK_PIN GP0
 
+// #undef I2C1_SCL_PIN
+// #undef I2C1_SDA_PIN
+
+#define I2C1_SCL_PIN GP5
+#define I2C1_SDA_PIN GP4
 
 /* disable debug print */
 //#define NO_DEBUG
