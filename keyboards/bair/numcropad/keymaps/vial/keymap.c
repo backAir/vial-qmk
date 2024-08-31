@@ -104,33 +104,101 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record){
 }
 
 
+// #ifdef OLED_ENABLE
+
+//     oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+//         return OLED_ROTATION_270;
+//     }
+//     // bool oled_task_user() {
+
+//     //     oled_set_cursor(0, 1);
+
+//     //     oled_write("Hello, world!", false);
+
+//     //     return false;
+//     // }
+
+
+//     bool oled_task_user(void) {
+//         // Host Keyboard Layer Status
+//         // Host Keyboard Layer Status
+//         oled_write_ln_P(PSTR("ANAVI Knob 1"), false);
+//         oled_write_ln_P(PSTR("Keymap: Default"), false);
+
+//         return false;
+//     }
+// #endif
+
+
+
+// logo
+#define ACH_LOGO { \
+        0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0x20, \
+        0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, 0x20, \
+        0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, 0x20, \
+        0x00 \
+}
+
+
 #ifdef OLED_ENABLE
 
-    oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-        return OLED_ROTATION_270;
-    }
-    // bool oled_task_user() {
-
-    //     oled_set_cursor(0, 1);
-
-    //     oled_write("Hello, world!", false);
-
-    //     return false;
+oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
+    // if (is_keyboard_master()) {
+    //     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
     // }
 
-
-    bool oled_task_user(void) {
-        // Host Keyboard Layer Status
-        oled_write_P(PSTR("elooo: "), false);
-        oled_write_ln_P(PSTR("Undefined"), false);
+    return rotation;
+}
 
 
-        // Host Keyboard LED Status
-        // led_t led_state = host_keyboard_led_state();
-        // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-        // oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-        // oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+bool render_status(void) {
+    static const char PROGMEM atreus_logo[] = ACH_LOGO;
+    oled_write_P(atreus_logo, false);
+    oled_write_P(PSTR("Layer: "), false);
 
+    switch (get_highest_layer(layer_state)) {
+        case 0:
+            oled_write_P(PSTR("QWERTY\n"), false);
+            break;
+        case 1:
+            oled_write_P(PSTR("MEDIA\n"), false);
+            break;
+        case 2:
+            oled_write_P(PSTR("NAV\n"), false);
+            break;
+        case 3:
+            oled_write_P(PSTR("SYM\n"), false);
+            break;
+        case 4:
+            oled_write_P(PSTR("NUM \n"), false);
+            break;
+        case 5:
+            oled_write_P(PSTR("FUN\n"), false);
+            break;
+        case 6:
+            oled_write_P(PSTR("BUTTON\n"), false);
+            break;
+        default:
+            // Or use the write_ln shortcut over adding '\n' to the end of your string
+            oled_write_ln_P(PSTR("Undefined"), false);
+    }
+
+    // Host Keyboard LED Status
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P(led_state.caps_lock ? PSTR("\rCaps: ON  ") : PSTR("\rCaps: OFF  "), false);
+
+
+    return false;
+}
+
+bool oled_task_kb(void) {
+    if (!oled_task_user()) {
         return false;
     }
+    // if (is_keyboard_master()) {
+    render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
+    // }
+    return false;
+}
+
 #endif
