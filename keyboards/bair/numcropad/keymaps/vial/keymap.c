@@ -104,33 +104,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record){
 }
 
 
-// #ifdef OLED_ENABLE
-
-//     oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-//         return OLED_ROTATION_270;
-//     }
-//     // bool oled_task_user() {
-
-//     //     oled_set_cursor(0, 1);
-
-//     //     oled_write("Hello, world!", false);
-
-//     //     return false;
-//     // }
-
-
-//     bool oled_task_user(void) {
-//         // Host Keyboard Layer Status
-//         // Host Keyboard Layer Status
-//         oled_write_ln_P(PSTR("ANAVI Knob 1"), false);
-//         oled_write_ln_P(PSTR("Keymap: Default"), false);
-
-//         return false;
-//     }
-// #endif
-
-
-
 // logo
 #define ACH_LOGO { \
         0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0x20, \
@@ -139,15 +112,48 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record){
         0x00 \
 }
 
+static const char PROGMEM PUFF[] = {
+0x00, 0xc0, 0x20, 0xa0, 0x20, 0x20, 0x20, 0x40, 0xc0, 0x30, 0x08, 0x04, 0x02, 0x02, 0x02, 0x02,
+0x02, 0x84, 0x4c, 0x04, 0x08, 0x04, 0x04, 0x02, 0x22, 0x72, 0xf9, 0xfd, 0x01, 0xfe, 0x00, 0x00,
+0x00, 0x01, 0x06, 0x19, 0xef, 0x87, 0x40, 0x20, 0xa7, 0xb8, 0xe0, 0x20, 0x40, 0x44, 0x26, 0x23,
+0x1d, 0xf0, 0x08, 0x64, 0x64, 0x04, 0x04, 0x08, 0xf0, 0x00, 0x00, 0x01, 0x1f, 0xe0, 0x00, 0x00,
+0x00, 0x00, 0x40, 0xa0, 0x9f, 0x87, 0xc8, 0x10, 0x11, 0x11, 0x08, 0x07, 0x30, 0x20, 0x20, 0x10,
+0x18, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x02, 0x01, 0x20, 0x20, 0xc0, 0x40, 0x4f, 0x30, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60, 0x91, 0x8a, 0x86, 0x44, 0x48, 0x10, 0x10, 0x10, 0x10,
+0x10, 0x10, 0x10, 0x10, 0x18, 0x28, 0x48, 0x44, 0x84, 0x8a, 0x91, 0x60, 0x00, 0x00, 0x00, 0x00
+};
 
 #ifdef OLED_ENABLE
+
+static void render_logo(void) {
+    // static const char PROGMEM image[] = PUFF;
+    // oled_write_P(image, false);
+    //     static const char PROGMEM qmk_logo[] = {
+    //     0x82, 0x83, 0x84, 0x85, 0x80, 0x81, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94,
+    //     0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4,
+    //     0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0x00
+    // };
+
+    oled_write_raw_P(PUFF, sizeof(PUFF));
+    oled_write_raw_P(PUFF, sizeof(PUFF)/2);
+    // oled_write_P(PSTR("haha text goes brrr: "), false);
+
+}
+
+
+// static void render_other_logo(void) {
+//     static const char PROGMEM atreus_logo[] = ACH_LOGO;
+//     oled_write_P(atreus_logo, false);
+// }
+
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
     // if (is_keyboard_master()) {
     //     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
     // }
 
-    return rotation;
+    // return rotation;
+    return OLED_ROTATION_90;
 }
 
 
@@ -160,24 +166,6 @@ bool render_status(void) {
         case 0:
             oled_write_P(PSTR("QWERTY\n"), false);
             break;
-        case 1:
-            oled_write_P(PSTR("MEDIA\n"), false);
-            break;
-        case 2:
-            oled_write_P(PSTR("NAV\n"), false);
-            break;
-        case 3:
-            oled_write_P(PSTR("SYM\n"), false);
-            break;
-        case 4:
-            oled_write_P(PSTR("NUM \n"), false);
-            break;
-        case 5:
-            oled_write_P(PSTR("FUN\n"), false);
-            break;
-        case 6:
-            oled_write_P(PSTR("BUTTON\n"), false);
-            break;
         default:
             // Or use the write_ln shortcut over adding '\n' to the end of your string
             oled_write_ln_P(PSTR("Undefined"), false);
@@ -187,17 +175,22 @@ bool render_status(void) {
     led_t led_state = host_keyboard_led_state();
     oled_write_P(led_state.caps_lock ? PSTR("\rCaps: ON  ") : PSTR("\rCaps: OFF  "), false);
 
-
     return false;
 }
 
+int stupid_logo = false;
 bool oled_task_kb(void) {
     if (!oled_task_user()) {
         return false;
     }
-    // if (is_keyboard_master()) {
-    render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
-    // }
+    if (is_keyboard_master()) {
+        if(stupid_logo){
+            render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
+        }else
+        {
+            render_logo();
+        }
+    }
     return false;
 }
 
