@@ -1,0 +1,15 @@
+# LTO_ENABLE = yes
+VIA_ENABLE = yes
+VIAL_ENABLE = yes
+# KEYBOARD_SHARED_EP = yes
+ENCODER_ENABLE = yes
+ENCODER_MAP_ENABLE = yes
+COMBO_ENABLE = yes
+
+
+# SRC += libmylibrary.a
+OLED_ENABLE = yes
+# OLED_DRIVER = ssd1306
+# OLED_TRANSPORT = i2c
+
+QMK_SETTINGS = yes

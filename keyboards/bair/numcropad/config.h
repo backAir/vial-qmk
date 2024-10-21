@@ -7,10 +7,10 @@
  * Feature disable options
  *  These options are also useful to firmware size reduction.
  */
-#define VIAL_KEYBOARD_UID {0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0}
+#define VIAL_KEYBOARD_UID {0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF1}
 
-#define VIAL_UNLOCK_COMBO_ROWS { 0, 1 }
-#define VIAL_UNLOCK_COMBO_COLS { 0, 2 }
+#define VIAL_UNLOCK_COMBO_ROWS { 0, 3 }
+#define VIAL_UNLOCK_COMBO_COLS { 3, 3 }
 
 
 
@@ -34,6 +34,16 @@
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP17
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1000U
 
+#define FLASH_SIZE 0x1000000
+
+#define VIAL_MACRO_COUNT 64
+
+
+// #define WEAR_LEVELING_BACKING_SIZE 2000000
+// #define WEAR_LEVELING_LOGICAL_SIZE 1000000
+
+// #undef WEAR_LEVELING_RP2040_FLASH_SIZE
+// #define WEAR_LEVELING_RP2040_FLASH_SIZE 16000000
 
 /* disable debug print */
 //#define NO_DEBUG

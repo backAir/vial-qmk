@@ -8,9 +8,8 @@ COMBO_ENABLE = yes
 
 
 # SRC += libmylibrary.a
-# OLED_ENABLE = yes
+OLED_ENABLE = yes
 # OLED_DRIVER = ssd1306
 # OLED_TRANSPORT = i2c
 
 QMK_SETTINGS = yes
-

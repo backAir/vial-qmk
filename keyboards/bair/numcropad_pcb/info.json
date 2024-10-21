@@ -1,0 +1,123 @@
+{
+    "manufacturer": "Anthony",
+    "keyboard_name": "numcropad_pcb",
+    "maintainer": "bair",
+    "bootloader": "rp2040",
+    "diode_direction": "ROW2COL",
+    "features": {
+        "bootmagic": true,
+        "command": false,
+        "console": false,
+        "extrakey": true,
+        "mousekey": true,
+        "rgb_matrix": true,
+        "nkro": true,
+        "encoder": true,
+        "oled": true
+    },
+    "matrix_pins": {
+        "cols": ["GP2","GP3","GP4","GP27","GP28","GP29"],
+        "rows": ["GP5","GP10", "GP9", "GP8","GP7","GP6"]
+    },
+    "encoder": {
+        "rotary": [
+            { "pin_a": "GP0", "pin_b": "GP1", "resolution": 4 }
+        ]
+    },
+    "processor": "RP2040",
+    "url": "",
+    "usb": {
+        "device_version": "1.0.0",
+        "pid": "0x0000",
+        "vid": "0xFEED"
+    },
+    "ws2812": {
+        "pin": "GP13"
+    },
+    "rgb_matrix": {
+        "driver": "ws2812",
+        "led_count": 21,
+        "animations": {
+            "alphas_mods": true,
+            "gradient_up_down": true,
+            "gradient_left_right": true,
+            "breathing": true,
+            "band_sat": true,
+            "band_val": true,
+            "band_pinwheel_sat": false,
+            "band_pinwheel_val": false,
+            "band_spiral_sat": true,
+            "band_spiral_val": true,
+            "cycle_all": true,
+            "cycle_left_right": true,
+            "cycle_up_down": true,
+            "cycle_out_in": true,
+            "cycle_out_in_dual": true,
+            "rainbow_moving_chevron": true,
+            "cycle_pinwheel": false,
+            "cycle_spiral": false,
+            "dual_beacon": true,
+            "rainbow_beacon": true,
+            "rainbow_pinwheels": false,
+            "raindrops": true,
+            "jellybean_raindrops": true,
+            "hue_breathing": true,
+            "hue_pendulum": false,
+            "hue_wave": true,
+            "pixel_fractal": true,
+            "pixel_flow": true,
+            "pixel_rain": true,
+            "solid_reactive_simple": true,
+            "solid_reactive_cross": true,
+            "solid_reactive_multicross": true,
+            "solid_reactive_nexus": true,
+            "solid_reactive_multinexus": true,
+            "solid_splash": true,
+            "solid_multisplash": true,
+            "splash": true,
+            "multisplash": true,
+            "digital_rain": true
+        }
+    },
+    "layouts": {
+        "LAYOUT_ortho_5x4": {
+            "layout": [
+                {"matrix": [0, 2], "x": 2, "y": 0},
+                {"matrix": [0, 3], "x": 3, "y": 0},
+                {"matrix": [0, 4], "x": 4, "y": 0},
+                {"matrix": [0, 5], "x": 5, "y": 0},
+
+                {"matrix": [1, 2], "x": 2, "y": 1},
+                {"matrix": [1, 3], "x": 3, "y": 1},
+                {"matrix": [1, 4], "x": 4, "y": 1},
+                {"matrix": [1, 5], "x": 5, "y": 1},
+
+                {"matrix": [2, 0], "x": 0, "y": 2},
+                {"matrix": [2, 1], "x": 1, "y": 2},
+                {"matrix": [2, 2], "x": 2, "y": 2},
+                {"matrix": [2, 3], "x": 3, "y": 2},
+                {"matrix": [2, 4], "x": 4, "y": 2},
+                {"matrix": [2, 5], "x": 5, "y": 2},
+
+                {"matrix": [3, 0], "x": 0, "y": 3},
+                {"matrix": [3, 1], "x": 1, "y": 3},
+                {"matrix": [3, 2], "x": 2, "y": 3},
+                {"matrix": [3, 3], "x": 3, "y": 3},
+                {"matrix": [3, 4], "x": 4, "y": 3},
+                {"matrix": [3, 5], "x": 5, "y": 3},
+
+                {"matrix": [4, 0], "x": 0, "y": 4},
+                {"matrix": [4, 1], "x": 1, "y": 4},
+                {"matrix": [4, 2], "x": 2, "y": 4},
+                {"matrix": [4, 3], "x": 3, "y": 4},
+                {"matrix": [4, 4], "x": 4, "y": 4},
+
+                {"matrix": [5, 0], "x": 0, "y": 5},
+                {"matrix": [5, 1], "x": 1, "y": 5},
+                {"matrix": [5, 3], "x": 3, "y": 5},
+                {"matrix": [5, 4], "x": 4, "y": 5},
+                {"matrix": [5, 5], "x": 5, "y": 5}
+            ]
+        }
+    }
+}

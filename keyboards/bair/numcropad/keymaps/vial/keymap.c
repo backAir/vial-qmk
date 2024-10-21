@@ -1,11 +1,15 @@
 // Copyright 2024 QMK
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include <stdlib.h>
 #include "keymap_definitions.h"
 #include QMK_KEYBOARD_H
 #include "quantum.h"
 // #include "gpio.h"
 // #include "i2c.h"
+
+#include "timer.h"
+
 
 
 // #include "config.h"
@@ -29,14 +33,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * └───┴───┴───┴───┘
      */
     [0] = LAYOUT_ortho_5x4(
-        FR_A,   FR_B,  FR_C,   FR_D,
-        FR_E,   FR_F,  FR_G,   FR_H,
-        FR_I,   FR_J,  FR_K,   FR_L,
-        FR_M,   FR_N,  FR_O,   FR_P,
-        FR_Q,   FR_R,  FR_S,   FR_T
-    ),
+        KC_MUTE,   FR_A,  FR_B,   FR_C,
+        KC_NUM_LOCK,   KC_KP_SLASH,  KC_KP_ASTERISK,   KC_BACKSPACE,
+        FR_D,   FR_E,  KC_KP_7,   KC_KP_8,  KC_KP_9,   KC_KP_MINUS,
+        FR_F,   FR_G,  KC_KP_4,   KC_KP_5,  KC_KP_6,   KC_KP_PLUS,
+        FR_H,   FR_I,  KC_KP_1,   KC_KP_2,  KC_KP_3,
+        FR_J, FR_K,  QK_BOOTLOADER,  KC_KP_DOT,   KC_KP_ENTER
+
+    )
     // [0] = LAYOUT_ortho_5x4(
-    //     TG(1),   KC_PSLS, KC_PAST, KC_PMNS,
+    //     TG(1),   KC_PSLS, KC_PAST, KC_PeMNS,
     //     KC_P7,   KC_P8,   KC_P9,   KC_PPLS,
     //     KC_P4,   KC_P5,   KC_P6,   KC_PERC,
     //     KC_P1,   KC_P2,   KC_P3,   KC_EQL,
@@ -74,122 +80,108 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
             },
 };
 #endif
-
+// #define OLED_ENABLE
+#if defined(OLED_ENABLE)
+#include "oled.h"
+static uint8_t oled_buffer[128 * 32 / 8] = {0};
+static bool oled_update_required = false;
 
 
 void matrix_init_user(void) {
+    memset(oled_buffer, 0, sizeof(oled_buffer));
     // Set the pin as an output
-    setPinOutput(GP13);
+    setPinOutput(GP1);
 }
 
 bool toggled = false;
+bool blinking = false;
+uint16_t blink_timer = 0;
+const uint16_t BLINK_INTERVAL = 500; // Blink interval in milliseconds
+int stupid_logo = false;
+int x = 0;
+int y = 0;
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record){
+    if(!record->event.pressed){
+        return false;
+    }
     switch (keycode) {
         case FR_A:
-            if (record->event.pressed) {
-                if(toggled){
-                    writePinLow(GP13);
-                    toggled = false;
-                }else{
-                    writePinHigh(GP13);
-                    toggled = true;
+            oled_buffer[0] = 0xFF;
+            oled_buffer[10] = 0x00;
+            oled_update_required = true;
+        break;
+        case FR_B:
+            oled_buffer[0] = 0x00;
+            oled_buffer[10] = 0xFF;
+            oled_update_required = true;
+        break;
+        case FR_C:
+            for (size_t i = 0; i < 10; i++)
+            {
+                bool in_bound = y < 128;
+                if(in_bound){
+                    write_to_oled_buffer(x,y,true);
+                    oled_update_required = true;
+                    x++;
+                    if (x >= OLED_WIDTH) {
+                        x = 0;
+                        y++;
+                    }
                 }
-                return false;
             }
-
-            break;
+        break;
+        case QK_BOOTLOADER:
+            return true;
     }
-    return true;
-}
-
-
-// logo
-#define ACH_LOGO { \
-        0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0x20, \
-        0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, 0x20, \
-        0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, 0x20, \
-        0x00 \
-}
-
-static const char PROGMEM PUFF[] = {
-0x00, 0xc0, 0x20, 0xa0, 0x20, 0x20, 0x20, 0x40, 0xc0, 0x30, 0x08, 0x04, 0x02, 0x02, 0x02, 0x02,
-0x02, 0x84, 0x4c, 0x04, 0x08, 0x04, 0x04, 0x02, 0x22, 0x72, 0xf9, 0xfd, 0x01, 0xfe, 0x00, 0x00,
-0x00, 0x01, 0x06, 0x19, 0xef, 0x87, 0x40, 0x20, 0xa7, 0xb8, 0xe0, 0x20, 0x40, 0x44, 0x26, 0x23,
-0x1d, 0xf0, 0x08, 0x64, 0x64, 0x04, 0x04, 0x08, 0xf0, 0x00, 0x00, 0x01, 0x1f, 0xe0, 0x00, 0x00,
-0x00, 0x00, 0x40, 0xa0, 0x9f, 0x87, 0xc8, 0x10, 0x11, 0x11, 0x08, 0x07, 0x30, 0x20, 0x20, 0x10,
-0x18, 0x01, 0x02, 0x04, 0x04, 0x04, 0x04, 0x02, 0x01, 0x20, 0x20, 0xc0, 0x40, 0x4f, 0x30, 0x00,
-0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60, 0x91, 0x8a, 0x86, 0x44, 0x48, 0x10, 0x10, 0x10, 0x10,
-0x10, 0x10, 0x10, 0x10, 0x18, 0x28, 0x48, 0x44, 0x84, 0x8a, 0x91, 0x60, 0x00, 0x00, 0x00, 0x00
-};
-
-#ifdef OLED_ENABLE
-
-static void render_logo(void) {
-    // static const char PROGMEM image[] = PUFF;
-    // oled_write_P(image, false);
-    //     static const char PROGMEM qmk_logo[] = {
-    //     0x82, 0x83, 0x84, 0x85, 0x80, 0x81, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94,
-    //     0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4,
-    //     0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0x00
-    // };
-
-    oled_write_raw_P(PUFF, sizeof(PUFF));
-    oled_write_raw_P(PUFF, sizeof(PUFF)/2);
-    // oled_write_P(PSTR("haha text goes brrr: "), false);
-
-}
-
-
-// static void render_other_logo(void) {
-//     static const char PROGMEM atreus_logo[] = ACH_LOGO;
-//     oled_write_P(atreus_logo, false);
-// }
-
-
-oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
-    // if (is_keyboard_master()) {
-    //     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
-    // }
-
-    // return rotation;
-    return OLED_ROTATION_90;
-}
-
-
-bool render_status(void) {
-    static const char PROGMEM atreus_logo[] = ACH_LOGO;
-    oled_write_P(atreus_logo, false);
-    oled_write_P(PSTR("Layer: "), false);
-
-    switch (get_highest_layer(layer_state)) {
-        case 0:
-            oled_write_P(PSTR("QWERTY\n"), false);
-            break;
-        default:
-            // Or use the write_ln shortcut over adding '\n' to the end of your string
-            oled_write_ln_P(PSTR("Undefined"), false);
-    }
-
-    // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.caps_lock ? PSTR("\rCaps: ON  ") : PSTR("\rCaps: OFF  "), false);
-
     return false;
 }
 
-int stupid_logo = false;
-bool oled_task_kb(void) {
-    if (!oled_task_user()) {
-        return false;
-    }
-    if (is_keyboard_master()) {
-        if(stupid_logo){
-            render_status();  // Renders the current keyboard state (layer, lock, caps, scroll, etc)
-        }else
-        {
-            render_logo();
+void matrix_scan_user(void) {
+    if (blinking) {
+        if (timer_elapsed(blink_timer) > BLINK_INTERVAL) {
+            blink_timer = timer_read();
+            if (readPin(GP1)) {
+                writePinLow(GP1);
+            } else {
+                writePinHigh(GP1);
+            }
         }
+    }
+}
+
+
+static void write_to_oled_buffer(uint8_t x, uint8_t y, bool on){
+    if (x >= OLED_WIDTH || y >= OLED_HEIGHT) {
+        return; // Out of bounds
+    }
+
+    uint16_t index = (y / 8) * OLED_WIDTH + x;
+    uint8_t bit = 1 << (y % 8);
+
+    if (on) {
+        oled_buffer[index] |= bit; // Set the bit to turn the pixel on
+    } else {
+        oled_buffer[index] &= ~bit; // Clear the bit to turn the pixel off
+    }
+}
+
+
+
+
+
+oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
+    return OLED_ROTATION_270;
+}
+
+
+
+
+bool oled_task_kb(void) {
+    if (oled_update_required) {
+        oled_write_raw((char*)oled_buffer, sizeof(oled_buffer));
+        oled_update_required = false;
     }
     return false;
 }
