@@ -111,6 +111,7 @@ static bool oled_update_required = false;
 
 
 void matrix_init_user(void) {
+    rgb_matrix_mode(RGB_MATRIX_GRADIENT_UP_DOWN);
     memset(oled_buffer, 0, sizeof(oled_buffer));
 
     rgblight_enable_noeeprom(); // enables Rgb, without saving settings
