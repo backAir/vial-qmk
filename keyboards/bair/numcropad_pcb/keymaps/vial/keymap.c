@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <stdlib.h>
+#include <string.h>
 #include "keymap_definitions.h"
 #include QMK_KEYBOARD_H
 #include "quantum.h"
@@ -103,17 +104,29 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 
 #define RGB_WHITE       0xFF, 0xFF, 0xFF
 
-// // #define OLED_ENABLE
+// #define OLED_ENABLE
 #if defined(OLED_ENABLE)
 #include "oled.h"
 static uint8_t oled_buffer[128 * 32 / 8] = {0};
 static bool oled_update_required = false;
 
 
+#define ACH_LOGO { \
+        0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0x20, \
+        0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, 0x20, \
+        0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, 0x20, \
+        0x00 \
+}
+
+
 void matrix_init_user(void) {
     rgb_matrix_mode(RGB_MATRIX_GRADIENT_UP_DOWN);
-    memset(oled_buffer, 0, sizeof(oled_buffer));
+    // static const char PROGMEM atreus_logo[] = ACH_LOGO;
 
+    memset(oled_buffer, 0, sizeof(oled_buffer));
+    memcpy(oled_buffer, PUFF,sizeof(char)*128);
+    // memset(ACH_LOGO, 0, sizeof(oled_buffer));
+    oled_update_required = true;
     rgblight_enable_noeeprom(); // enables Rgb, without saving settings
     rgblight_sethsv_noeeprom(HSV_WHITE);
     // Set the pin as an output
@@ -131,38 +144,38 @@ int y = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record){
 
-    if(!record->event.pressed){
-        return true;
-    }
-    switch (keycode) {
-        case FR_A:
-            oled_buffer[0] = 0xFF;
-            oled_buffer[10] = 0x00;
-            oled_update_required = true;
-        break;
-        case FR_B:
-            oled_buffer[0] = 0x00;
-            oled_buffer[10] = 0xFF;
-            oled_update_required = true;
-        break;
-        case FR_C:
-            for (size_t i = 0; i < 10; i++)
-            {
-                bool in_bound = y < 128;
-                if(in_bound){
-                    write_to_oled_buffer(x,y,true);
-                    oled_update_required = true;
-                    x++;
-                    if (x >= OLED_WIDTH) {
-                        x = 0;
-                        y++;
-                    }
-                }
-            }
-        break;
-        case QK_BOOTLOADER:
-            return true;
-    }
+    // if(!record->event.pressed){
+    //     return true;
+    // }
+    // switch (keycode) {
+    //     case FR_A:
+    //         oled_buffer[0] = 0xFF;
+    //         oled_buffer[10] = 0x00;
+    //         oled_update_required = true;
+    //     break;
+    //     case FR_B:
+    //         oled_buffer[0] = 0x00;
+    //         oled_buffer[10] = 0xFF;
+    //         oled_update_required = true;
+    //     break;
+    //     case FR_C:
+    //         for (size_t i = 0; i < 10; i++)
+    //         {
+    //             bool in_bound = y < 128;
+    //             if(in_bound){
+    //                 write_to_oled_buffer(x,y,true);
+    //                 oled_update_required = true;
+    //                 x++;
+    //                 if (x >= OLED_WIDTH) {
+    //                     x = 0;
+    //                     y++;
+    //                 }
+    //             }
+    //         }
+    //     break;
+    //     case QK_BOOTLOADER:
+    //         return true;
+    // }
     return true;
 }
 
@@ -200,6 +213,7 @@ static void write_to_oled_buffer(uint8_t x, uint8_t y, bool on){
 
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
+    write_to_oled_buffer(0,0,0);
     return OLED_ROTATION_270;
 }
 
