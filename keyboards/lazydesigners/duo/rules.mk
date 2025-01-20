@@ -9,4 +9,11 @@ COMMAND_ENABLE = no         # Commands for debug and configuration
 NKRO_ENABLE = yes           # Enable N-Key Rollover
 BACKLIGHT_ENABLE = no       # Enable keyboard backlight functionality
 RGBLIGHT_ENABLE = no        # Enable keyboard RGB underglow
+<<<<<<< HEAD:keyboards/stenokeyboards/the_uni/rp_2040/rules.mk
 AUDIO_ENABLE = no           # Audio output
+STENO_ENABLE = yes
+VIA_ENABLE = yes
+VIAL_ENABLE=yes
+=======
+AUDIO_ENABLE = no           # Audio output
+>>>>>>> upstream/vial:keyboards/lazydesigners/duo/rules.mk
