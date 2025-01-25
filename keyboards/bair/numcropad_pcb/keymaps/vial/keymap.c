@@ -11,7 +11,13 @@
 
 #include "timer.h"
 
-
+// enum layer_names
+// {
+//     Base,
+//     Two,
+//     Three,
+//     RGB
+// };
 
 // #include "config.h"
 
@@ -35,12 +41,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [0] = LAYOUT_ortho_5x4(
         KC_MUTE,   FR_A,  FR_B,   FR_C,
-        FR_D,   FR_E, KC_NUM_LOCK,   KC_KP_SLASH,  KC_KP_ASTERISK,   KC_BACKSPACE,
+        0x5203,   FR_E, KC_NUM_LOCK,   KC_KP_SLASH,  KC_KP_ASTERISK,   KC_BACKSPACE,
         FR_F,   FR_G,  KC_KP_7,   KC_KP_8,  KC_KP_9,   KC_KP_MINUS,
         FR_H,   FR_I,  KC_KP_4,   KC_KP_5,  KC_KP_6,   KC_KP_PLUS,
         FR_J,   FR_K,  KC_KP_1,   KC_KP_2,  KC_KP_3,
         FR_L,   FR_M,  KC_KP_0,  KC_KP_DOT,   KC_KP_ENTER
-
+    ),
+    [3] = LAYOUT_ortho_5x4(
+        QK_UNDERGLOW_TOGGLE,   RGB_MODE_PLAIN,  QK_UNDERGLOW_MODE_PREVIOUS,   QK_UNDERGLOW_MODE_NEXT,
+        0x5200,   0, QK_UNDERGLOW_SATURATION_DOWN,   QK_UNDERGLOW_SATURATION_UP,  QK_UNDERGLOW_VALUE_DOWN,   QK_UNDERGLOW_VALUE_UP,
+        0,   0,  0,   0,  QK_UNDERGLOW_SPEED_DOWN,   QK_UNDERGLOW_SPEED_UP,
+        0,   0,  0,   0,  0,   0,
+        0,   0,  0,   0,  0,
+        0,   0,  0,  0,   QK_BOOTLOADER
     )
     // [0] = LAYOUT_ortho_5x4(
     //     TG(1),   KC_PSLS, KC_PAST, KC_PeMNS,
@@ -98,6 +111,8 @@ led_config_t g_led_config = { {
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [0] =   { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), // Encoder 0
+            },
+    [3] =   { ENCODER_CCW_CW(QK_UNDERGLOW_HUE_DOWN, QK_UNDERGLOW_HUE_UP), // Encoder 0
             },
 };
 #endif
@@ -179,6 +194,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record){
     return true;
 }
 
+
+// Custom code to run on layer change
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+        case 0:
+            // memset(oled_buffer, 0, sizeof(oled_buffer));
+            memcpy(oled_buffer, PUFF,sizeof(char)*128);
+            break;7
+        case 3:
+            memset(oled_buffer, 0, sizeof(char)*32);
+            memcpy(oled_buffer+32, RGB_LOGO,sizeof(char)*(64));
+            memset(oled_buffer+32+64, 0, sizeof(char)*32);
+            break;
+        // Add cases for other layers as needed
+        default:
+            break;
+    }
+    oled_update_required = true;
+    return state;
+}
+
 void matrix_scan_user(void) {
     if (blinking) {
         if (timer_elapsed(blink_timer) > BLINK_INTERVAL) {
@@ -220,11 +256,27 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
 
 
 
-bool oled_task_kb(void) {
+// bool oled_task_user(void) {
+// // bool oled_task_kb(void) {
+
+//     if (oled_update_required) {
+//         oled_write_raw((char*)oled_buffer, sizeof(oled_buffer));
+//         // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+//         oled_update_required = false;
+//     }
+//     return false;
+// }
+bool oled_task_user(void) {
+    // Set cursor position
     if (oled_update_required) {
         oled_write_raw((char*)oled_buffer, sizeof(oled_buffer));
         oled_update_required = false;
     }
+    oled_set_cursor(32, 1);
+    // Caps lock status
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P(led_state.num_lock ? PSTR("Num On ") : PSTR("Num Off"), false);
+
     return false;
 }
 
