@@ -1,0 +1,42 @@
+{
+    "manufacturer": "Anthony (Bair)",
+    "keyboard_name": "QMK_NES",
+    "maintainer": "bair",
+    "bootloader": "rp2040",
+    "diode_direction": "ROW2COL",
+    "features": {
+        "bootmagic": true,
+        "command": false,
+        "console": false,
+        "extrakey": true,
+        "mousekey": true,
+        "nkro": true
+    },
+    "matrix_pins": {
+        "direct" : [["GP3","GP1", "GP2", "GP0", "GP4","GP27","GP28","GP29","GP5"]]
+
+    },
+
+    "processor": "RP2040",
+    "url": "",
+    "usb": {
+        "device_version": "1.0.0",
+        "pid": "0x0421",
+        "vid": "0x0069"
+    },
+    "layouts": {
+        "LAYOUT_ortho_8x1": {
+            "layout": [
+                {"matrix": [0, 0], "x": 0, "y": 0},
+                {"matrix": [0, 1], "x": 0, "y": 1},
+                {"matrix": [0, 2], "x": 0, "y": 2},
+                {"matrix": [0, 3], "x": 0, "y": 3},
+                {"matrix": [0, 4], "x": 0, "y": 4},
+                {"matrix": [0, 5], "x": 0, "y": 5},
+                {"matrix": [0, 6], "x": 0, "y": 6},
+                {"matrix": [0, 7], "x": 0, "y": 7},
+                {"matrix": [0, 8], "x": 0, "y": 8}
+            ]
+        }
+    }
+}
