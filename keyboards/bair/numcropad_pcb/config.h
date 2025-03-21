@@ -26,7 +26,7 @@
 #ifdef OLED_ENABLE
 #    define OLED_DISPLAY_128X32
 // #    define OLED_FONT_H "./lib/glcdfont.c"
-// #    define OLED_TIMEOUT 30000
+#    define OLED_TIMEOUT 0
 #    define OLED_SCROLL_TIMEOUT 30000
 #endif // OLED_ENABLE
 

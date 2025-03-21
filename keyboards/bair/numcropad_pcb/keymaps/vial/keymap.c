@@ -201,7 +201,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         case 0:
             // memset(oled_buffer, 0, sizeof(oled_buffer));
             memcpy(oled_buffer, PUFF,sizeof(char)*128);
-            break;7
+            break;
         case 3:
             memset(oled_buffer, 0, sizeof(char)*32);
             memcpy(oled_buffer+32, RGB_LOGO,sizeof(char)*(64));
@@ -275,7 +275,19 @@ bool oled_task_user(void) {
     oled_set_cursor(32, 1);
     // Caps lock status
     led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR("Num On ") : PSTR("Num Off"), false);
+    // oled_write_P(led_state.num_lock ? PSTR("Num On ") : PSTR("Num Off"), false);
+    // if (led_state.num_lock){
+
+    // }else
+    // {
+
+    // }
+
+    uint8_t num_lock_led_index = 0;
+    //turns off numlock led when off
+    if (!led_state.num_lock) {
+        rgb_matrix_set_color(num_lock_led_index, RGB_OFF);
+    }
 
     return false;
 }
