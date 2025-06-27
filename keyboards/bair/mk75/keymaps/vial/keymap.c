@@ -83,7 +83,7 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 // #define OLED_ENABLE
 #if defined(OLED_ENABLE)
 #include "oled.h"
-static uint8_t oled_buffer[128 * 32 / 8] = {0};
+static uint8_t oled_buffer[128 * 64 / 8] = {0};
 static bool oled_update_required = false;
 
 
@@ -119,19 +119,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record){
     //         oled_update_required = true;
     //     break;
     //     case FR_C:
-    //         for (size_t i = 0; i < 10; i++)
-    //         {
-    //             bool in_bound = y < 128;
-    //             if(in_bound){
-    //                 write_to_oled_buffer(x,y,true);
-    //                 oled_update_required = true;
-    //                 x++;
-    //                 if (x >= OLED_WIDTH) {
-    //                     x = 0;
-    //                     y++;
-    //                 }
-    //             }
-    //         }
+            // for (size_t i = 0; i < 10; i++)
+            // {
+            //     bool in_bound = y < 128;
+            //     if(in_bound){
+            //         write_to_oled_buffer(x,y,true);
+            //         oled_update_required = true;
+            //         x++;
+            //         if (x >= OLED_WIDTH) {
+            //             x = 0;
+            //             y++;
+            //         }
+            //     }
+            // }
     //     break;
     //     case QK_BOOTLOADER:
     //         return true;
@@ -182,8 +182,15 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
 
 
 bool oled_task_kb(void) {
+    for (size_t i = 0; i < 10; i++)
+    {
+        oled_buffer[i] = 0xFF;
+    }
+    const char *text = PSTR("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()[]{}-=_+?/,.|abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()[]{}-=_+?/,.|");
+    oled_write_P(text, false);
+
+    // oled_write_raw((char*)oled_buffer, sizeof(oled_buffer));
     if (oled_update_required) {
-        oled_write_raw((char*)oled_buffer, sizeof(oled_buffer));
         oled_update_required = false;
     }
     return false;
